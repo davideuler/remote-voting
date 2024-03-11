@@ -1,28 +1,33 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<h1>{{ voting_session.title }}</h1>
-<p>{{ voting_session.description }}</p>
-<form method="post">
-    {{ form.hidden_tag() }}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mt-4">{{ voting_session.title }}</h1>
+            <p>{{ voting_session.description }}</p>
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    {% for category, message in messages %}
-      <div class="alert alert-{{ category }}">
-        {{ message }}
-      </div>
-    {% endfor %}
-  {% endif %}
-{% endwith %}
+            <form method="post" class="my-4">
+                {{ form.hidden_tag() }}
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                {% endif %}
+                {% endwith %}
 
-    {% for task in tasks %}
-    <div>
-        {{ form.votes[loop.index0].task_id(value=task.task_id, readonly='readonly', type='hidden') }}
-        <label for="votes-{{ loop.index0 }}-vote_value">{{ task.title }}:</label>
-        {{ form.votes[loop.index0].vote_value }}
+                {% for task in tasks %}
+                <div class="form-group">
+                    {{ form.votes[loop.index0].task_id(value=task.task_id, readonly='readonly', type='hidden') }}
+                    <label for="votes-{{ loop.index0 }}-vote_value">{{ task.title }}:</label>
+                    {{ form.votes[loop.index0].vote_value(class="form-control") }}
+                </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-primary">Submit Vote</button>
+            </form>
+        </div>
     </div>
-    {% endfor %}
-    <button type="submit">Submit Vote</button>
-</form>
+</div>
 {% endblock %}

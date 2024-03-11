@@ -14,7 +14,10 @@ class VotingSession(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     finished_at = db.Column(db.DateTime, nullable=True)
+    creator_user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     tasks = db.relationship('Task', backref='voting_session', lazy=True)
+    # Add a relationship to the User model
+    creator = db.relationship('User', backref='created_voting_sessions')
 
 class Task(db.Model):
     __tablename__ = 'task'

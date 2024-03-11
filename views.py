@@ -12,7 +12,8 @@ from utils import generate_qr_code, summarize_votes
 @login_required
 def index():
     # List all voting sessions
-    voting_sessions = VotingSession.query.filter_by(is_active=True).all()
+    voting_sessions = VotingSession.query.filter_by(
+        is_active=True, creator_user_id=current_user.id).all()
 
     return render_template('index.html', voting_sessions=voting_sessions)
 
@@ -26,7 +27,8 @@ def start_vote():
         voting_session = VotingSession(
             title=form.title.data,
             description=form.description.data,
-            vote_type=form.vote_type.data
+            vote_type=form.vote_type.data,
+            creator_user_id=current_user.id
         )
         db.session.add(voting_session)
         db.session.commit()

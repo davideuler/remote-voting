@@ -2,8 +2,10 @@ from flask import render_template, request, redirect, url_for, jsonify
 from flask_login import login_required, current_user
 from app import app, db
 from datetime import datetime
+
+from wtforms import FieldList, FormField
 from models import VotingSession, Task, Vote
-from forms import StartVoteForm, VoteForm
+from forms import StartVoteForm, VoteForm, VoteField
 from utils import generate_qr_code, summarize_votes
 
 @app.route('/')
@@ -11,7 +13,9 @@ from utils import generate_qr_code, summarize_votes
 def index():
     # List all voting sessions
     voting_sessions = VotingSession.query.filter_by(is_active=True).all()
+
     return render_template('index.html', voting_sessions=voting_sessions)
+
 
 @app.route('/start', methods=['GET', 'POST'])
 @login_required
@@ -49,19 +53,30 @@ def vote(session_id):
     if not voting_session.is_active:
         return redirect(url_for('index'))
     form = VoteForm()
-    if form.validate_on_submit():
+    if request.method == 'POST': #form.validate_on_submit():
         # Record user's votes
-        for task_id, vote_value in form.votes.data.items():
+        print("votes submitted....")
+        for vote_form in form.votes:
             vote = Vote(
                 session_id=session_id,
-                task_id=task_id,
-                vote_value=vote_value,
+                task_id=vote_form.task_id.data,
+                vote_value=vote_form.vote_value.data,
                 user_id=current_user.id
             )
             db.session.add(vote)
         db.session.commit()
         return redirect(url_for('vote_details', session_id=session_id))
     tasks = Task.query.filter_by(session_id=session_id).all()
+    print("tasks count:%s tasks:%s" % (len(tasks), str(tasks)) )
+    # Initialize form.votes with the number of tasks
+    while len(form.votes) < len(tasks):
+        form.votes.append_entry()
+
+    form.votes.min_entries = len(tasks)
+    form.votes.max_entries = len(tasks)
+    for i, task in enumerate(tasks):
+        form.votes[i].task_id.data = task.task_id
+    print("form.votes, len:%d votes:%s" %  (len(form.votes), str(form.votes)) )
     return render_template('vote.html', voting_session=voting_session, tasks=tasks, form=form)
 
 @app.route('/vote/details/<session_id>')
@@ -70,6 +85,8 @@ def vote_details(session_id):
     voting_session = VotingSession.query.get_or_404(session_id)
     tasks = Task.query.filter_by(session_id=session_id).all()
     votes = Vote.query.filter_by(session_id=session_id).all()
+#    votes_with_tasks = db.session.query(Vote, Task).join(Task, Vote.task_id == Task.task_id).filter(Vote.session_id == session_id).all()
+
     summary = summarize_votes(votes, voting_session.vote_type)
     qr_code = generate_qr_code(url_for('vote', session_id=session_id, _external=True))
     return render_template('vote_details.html', voting_session=voting_session, tasks=tasks, votes=votes, summary=summary, qr_code=qr_code)

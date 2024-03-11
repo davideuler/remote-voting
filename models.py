@@ -31,6 +31,8 @@ class Vote(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     session_id = db.Column(db.String(36), db.ForeignKey('voting_session.session_id'), nullable=False)
     task_id = db.Column(db.Integer, db.ForeignKey('task.task_id'), nullable=True)
+    task = db.relationship('Task', backref='votes', lazy=True)
+
     vote_value = db.Column(db.Text, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)

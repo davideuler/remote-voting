@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SelectField, FieldList, FormField
+from wtforms import StringField, TextAreaField, SelectField, FieldList, FormField 
 from wtforms.validators import DataRequired
 
 class StartVoteForm(FlaskForm):
@@ -17,4 +17,5 @@ class VoteField(FlaskForm):
 
 class VoteForm(FlaskForm):
     votes = FieldList(FormField(VoteField), min_entries=1)
+
 

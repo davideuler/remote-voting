@@ -8,8 +8,8 @@
     {% for task in tasks %}
     <div>
         <label for="votes-{{ loop.index0 }}-vote_value">{{ task.title }}:</label>
-        {{ form.votes[loop.index0].vote_value }}
         {{ form.votes[loop.index0].task_id(value=task.task_id) }}
+        {{ form.votes[loop.index0].vote_value }}
     </div>
     {% endfor %}
     <button type="submit">Submit Vote</button>

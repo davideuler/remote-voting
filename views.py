@@ -42,6 +42,13 @@ def start_vote():
                 session_id=voting_session.session_id
             )
             db.session.add(task)
+        elif form.vote_type.data == 'brainstorming':
+            task = Task(
+                title=form.title.data,
+                description=form.description.data,
+                session_id=voting_session.session_id
+            )
+            db.session.add(task)
         db.session.commit()
         return redirect(url_for('vote_details', session_id=voting_session.session_id))
     return render_template('start_vote.html', form=form)
@@ -105,7 +112,6 @@ def vote_details(session_id):
     voting_session = VotingSession.query.get_or_404(session_id)
     tasks = Task.query.filter_by(session_id=session_id).all()
     votes = Vote.query.filter_by(session_id=session_id).all()
-#    votes_with_tasks = db.session.query(Vote, Task).join(Task, Vote.task_id == Task.task_id).filter(Vote.session_id == session_id).all()
 
     summary = summarize_votes(votes, voting_session.vote_type)
     qr_code = generate_qr_code(url_for('vote', session_id=session_id, _external=True))

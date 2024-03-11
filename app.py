@@ -4,10 +4,20 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from config import Config
 
+import os 
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
 app = Flask(__name__)
 app.config.from_object(Config)
 
 db = SQLAlchemy(app)
+db.init_app(app)
+
+def create_db():
+    with app.app_context():
+        db.create_all()
+
+create_db()
 migrate = Migrate(app, db)
 
 login_manager = LoginManager(app)
@@ -18,4 +28,4 @@ from auth import *
 from models import *
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=8899, debug=True)

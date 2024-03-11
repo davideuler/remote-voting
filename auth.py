@@ -1,4 +1,4 @@
-from flask import redirect, url_for, flash
+from flask import redirect, url_for, flash, request
 from flask_login import login_user, logout_user, current_user
 from app import app, db, login_manager
 from models import User

@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, url_for, jsonify
 from flask_login import login_required, current_user
 from app import app, db
+from datetime import datetime
 from models import VotingSession, Task, Vote
 from forms import StartVoteForm, VoteForm
 from utils import generate_qr_code, summarize_votes

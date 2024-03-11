@@ -9,9 +9,12 @@ class StartVoteForm(FlaskForm):
     task_details = TextAreaField('Task Details')
     option_list = TextAreaField('Option List')
 
-class VoteForm(FlaskForm):
-    votes = FieldList(FormField(VoteField), min_entries=1)
 
 class VoteField(FlaskForm):
     task_id = StringField('Task ID')
     vote_value = StringField('Vote Value')
+
+
+class VoteForm(FlaskForm):
+    votes = FieldList(FormField(VoteField), min_entries=1)
+

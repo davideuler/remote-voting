@@ -1,3 +1,5 @@
+from flask_login import UserMixin
+
 from app import db
 from datetime import datetime
 import uuid
@@ -33,8 +35,14 @@ class Vote(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
     votes = db.relationship('Vote', backref='user', lazy=True)
+    is_active = db.Column(db.Boolean, default=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Flask-Login integration
+    def get_id(self):
+        return str(self.id)  # Convert the ID to a string

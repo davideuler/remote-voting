@@ -5,7 +5,7 @@
 <p>{{ voting_session.description }}</p>
 {% if voting_session.is_active %}
     <p>Vote is currently active.</p>
-    <img src="{{ qr_code }}" alt="QR Code">
+    <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code">
     <p>Scan the QR code or use the link below to vote:</p>
     <a href="{{ url_for('vote', session_id=voting_session.session_id) }}">{{ url_for('vote', session_id=voting_session.session_id, _external=True) }}</a>
     <a href="{{ url_for('end_vote', session_id=voting_session.session_id) }}">End Vote</a>

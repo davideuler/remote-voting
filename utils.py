@@ -1,6 +1,10 @@
 import qrcode
 import io
 from flask import send_file
+from base64 import b64encode
+
+#        qr.add_data(url_for('vote.vote', vote_session_id=vote_session.id, _external=True))
+#        img.save(buffered)
 
 def generate_qr_code(data):
     qr = qrcode.QRCode(
@@ -15,7 +19,8 @@ def generate_qr_code(data):
     img_io = io.BytesIO()
     img.save(img_io, 'PNG')
     img_io.seek(0)
-    return send_file(img_io, mimetype='image/png')
+    qr_code = b64encode(img_io.getvalue()).decode('utf-8')
+    return qr_code
 
 def summarize_votes(votes, vote_type):
     # This function should summarize the votes based on the vote_type

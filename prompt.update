@@ -1,0 +1,4 @@
+Please help add a creator_user_id to the VotingSession. 
+The creator user_id in a VotingSession is saved when a user started a vote session.
+
+When user logged in the system, the user could get the VotingSession list owned by himself.

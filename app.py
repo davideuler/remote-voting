@@ -4,11 +4,16 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from config import Config
 
+from flask_wtf.csrf import CSRFProtect 
+csrf = CSRFProtect() 
+
 import os 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 app = Flask(__name__)
 app.config.from_object(Config)
+app.config['SECRET_KEY'] = Config.SECRET_KEY
+csrf.init_app(app)
 
 db = SQLAlchemy(app)
 db.init_app(app)

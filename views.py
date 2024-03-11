@@ -60,11 +60,7 @@ def vote(session_id):
     if not voting_session.is_active:
         return redirect(url_for('index'))
     form = VoteForm()
-    if request.method == 'POST': #form.validate_on_submit():
-        if not form.validate_on_submit():
-            app.logger.info('Form failed to validate:')
-            app.logger.info(form.errors)
-
+    if request.method == 'POST' and form.validate_on_submit(): 
         error = False
         for vote_form in form.votes:
             # Check if the vote already exists
@@ -92,18 +88,18 @@ def vote(session_id):
                 db.session.add(vote)
             db.session.commit()
             return redirect(url_for('vote_details', session_id=session_id))
+    elif request.method == 'POST': #and form.validate_on_submit(): 
+        app.logger.error('Form failed to validate:')
+        app.logger.error(form.errors)
 
     tasks = Task.query.filter_by(session_id=session_id).all()
-    print("tasks count:%s tasks:%s" % (len(tasks), str(tasks)) )
     # Initialize form.votes with the number of tasks
     while len(form.votes) < len(tasks):
         form.votes.append_entry()
 
-    form.votes.min_entries = len(tasks)
-    form.votes.max_entries = len(tasks)
     for i, task in enumerate(tasks):
         form.votes[i].task_id.data = task.task_id
-    print("form.votes, len:%d votes:%s" %  (len(form.votes), str(form.votes)) )
+    #print("form.votes, len:%d votes:%s" %  (len(form.votes), str(form.votes)) )
     return render_template('vote.html', voting_session=voting_session, tasks=tasks, form=form)
 
 @app.route('/vote/details/<session_id>')

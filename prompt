@@ -1,0 +1,69 @@
+Implement an H5 Web application that can be accessed from a PC browser as well as from a mobile device to access the Web application.
+
+Scenario: Used for real-time voting during remote team meetings. Capable of quickly initiating votes, executing votes, viewing the voting list, viewing voting details, ending votes, and displaying results.
+
+## Voting types:
+
+* Scrum planning meeting points/workload estimation: Independent estimation, consolidated summary.
+When creating "point estimation" votes, paste multiple task lists, each task on a line.
+Personnel receiving the voting link to estimate the workload for each task. The unit of workload is points.
+* Brainstorming: Start voting with a given topic and description. It is usefull in retrospective meeting/brainstorming: Propose ideas; whiteboard voting.
+* Option voting: Provide a topic with multiple options, and after issuing, vote on each option.
+
+## Database design:
+VotingSession table:
+When initiating a vote, establish VotingSession data:
+session_id: The id of VoteSession, UUID
+title: The title of a voting session
+description: Detailed description of the vote
+is_active: Whether it is active, default is true, after closing it is false, stopping the vote
+vote_type: There are three values: estimation, brainstorming, options_voting
+created_at, updated_at, finished_at
+A voting session has multiple tasks, each task has a title.
+Each user votes for this voting session.
+
+For point estimation, each VotingSession corresponds to multiple tasks. Enter multiple lines of content for each task in the task details(multiple line textarea)  when initiating a vote. In this type of vote, each user needs to estimate points (vote) for each task to generate a vote record.
+For brainstorming, generate a corresponding task, and users vote for this task to generate a vote record. The vote_value is a textual description, representing the user's suggestion.
+For options_voting, when initiating a vote, enter multiple lines of content in the option list, each line corresponding to an option, and the option list is stored in the Task table's option_list.
+
+Task table:
+task_id: Task ID, auto-increment integer
+title: The title of the task
+description: Detailed description of the task
+option_list: When the voting type is options_voting, this field stores the option list, saving a list, each list for an option. The field can be empty.
+created_at, updated_at
+
+Vote table:
+session_id: The id of VoteSession
+task_id: Associated task ID, can be null
+vote_value: The vote value, can be null. For point estimation, this value represents the estimated points; for options_voting, this value represents the selected option. For options_voting, this value indicates the option selected during voting.
+user_id: The voting user
+
+## User login:
+Users log in using their GitHub account. 
+Users need to log in to use the product.
+
+## Usage process and web page:
+
+1.Start voting page: On the vote list page, user can click "start" to start a vote. Then the user can input vote title, description, and details for vote task in the "Start Voting" page.
+2.Voting details page: When the vote is created, generate a QR code with token information for the voting page link, display this QR code on the page, as well as the link to the voting page. Users can send the link or QR code to participants.
+3.Voting page: After starting the vote, each user submits their own by scanning the QR code or open the voting page link in the voting page.
+4.Vote List page: The creator of the vote can see the votes they created on the voting list page. On the details page of the vote, they can see the records of different users' votes and can also end the vote. After ending the vote, they can see the summary results of the vote.
+
+
+Different types of votes, the summary and method of voting results:
+
+Brainstorming: Displayed according to the voting time, each result
+Point estimation: Displayed in numerical order of the voting results, also showing the average value
+Decision voting: The results of the vote are sorted by the number of votes.
+
+## Design considerations
+1. **Security and Privacy Concerns**: the data is stored in sqlite database. and username could not be duplicate in database. Since it s a realtime voting application, the voting could not be modified after ended.
+
+2. **User Interface Requirements**: The interface should be auto adaptive for different platform on PC browsers and mobiles.
+
+3. **Technology Stack**: flask, python
+
+4. **Scalability and Performance**: What are the expected scalability requirements? How many concurrent users should the application support? It should support at least 30 qps requests, and support more than 10 thousands of users.
+
+You are an excellant and profession python programmer, and an expert at front-end development. You need to implement all server-side code, as well as the complete code HTML code for each web page. This includes initiating votes, viewing the voting list, viewing voting details, ending votes, and viewing voting results.

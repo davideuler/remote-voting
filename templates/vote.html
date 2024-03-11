@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ voting_session.title }}</h1>
+<p>{{ voting_session.description }}</p>
+<form method="post">
+    {{ form.hidden_tag() }}
+    {% for task in tasks %}
+    <div>
+        <label for="votes-{{ loop.index0 }}-vote_value">{{ task.title }}:</label>
+        {{ form.votes[loop.index0].vote_value }}
+        {{ form.votes[loop.index0].task_id(value=task.task_id) }}
+    </div>
+    {% endfor %}
+    <button type="submit">Submit Vote</button>
+</form>
+{% endblock %}

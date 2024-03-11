@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Voting Sessions</h1>
+<ul>
+    {% for session in voting_sessions %}
+    <li>
+        <a href="{{ url_for('vote_details', session_id=session.session_id) }}">{{ session.title }}</a>
+        ({{ 'Active' if session.is_active else 'Finished' }})
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

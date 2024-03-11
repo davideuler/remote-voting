@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ voting_session.title }}</h1>
+<p>{{ voting_session.description }}</p>
+{% if voting_session.is_active %}
+    <p>Vote is currently active.</p>
+    <img src="{{ qr_code }}" alt="QR Code">
+    <p>Scan the QR code or use the link below to vote:</p>
+    <a href="{{ url_for('vote', session_id=voting_session.session_id) }}">{{ url_for('vote', session_id=voting_session.session_id, _external=True) }}</a>
+    <a href="{{ url_for('end_vote', session_id=voting_session.session_id) }}">End Vote</a>
+{% else %}
+    <p>Vote has ended.</p>
+{% endif %}
+<h2>Vote Summary</h2>
+<!-- Display the summary of votes based on the vote type -->
+{% if summary %}
+    <!-- Display the summary here -->
+{% else %}
+    <p>No votes to display.</p>
+{% endif %}
+<h2>Vote Details</h2>
+<ul>
+    {% for vote in votes %}
+    <li>{{ vote.user.username }} voted {{ vote.vote_value }} for {{ vote.task.title }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}

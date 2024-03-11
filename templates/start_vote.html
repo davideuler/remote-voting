@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Start a New Vote</h1>
+<form method="post">
+    {{ form.hidden_tag() }}
+    <div>
+        <label for="title">Title:</label>
+        {{ form.title }}
+    </div>
+    <div>
+        <label for="description">Description:</label>
+        {{ form.description }}
+    </div>
+    <div>
+        <label for="vote_type">Vote Type:</label>
+        {{ form.vote_type }}
+    </div>
+    <div id="task_details_container" style="display: none;">
+        <label for="task_details">Task Details:</label>
+        {{ form.task_details }}
+    </div>
+    <div id="option_list_container" style="display: none;">
+        <label for="option_list">Option List:</label>
+        {{ form.option_list }}
+    </div>
+    <button type="submit">Start Vote</button>
+</form>
+<script>
+    document.getElementById('vote_type').addEventListener('change', function() {
+        var voteType = this.value;
+        var taskDetailsContainer = document.getElementById('task_details_container');
+        var optionListContainer = document.getElementById('option_list_container');
+        if (voteType === 'estimation') {
+            taskDetailsContainer.style.display = 'block';
+            optionListContainer.style.display = 'none';
+        } else if (voteType === 'options_voting') {
+            taskDetailsContainer.style.display = 'none';
+            optionListContainer.style.display = 'block';
+        } else {
+            taskDetailsContainer.style.display = 'none';
+            optionListContainer.style.display = 'none';
+        }
+    });
+</script>
+{% endblock %}

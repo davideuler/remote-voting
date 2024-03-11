@@ -5,7 +5,7 @@ from wtforms.validators import DataRequired
 class StartVoteForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = TextAreaField('Description')
-    vote_type = SelectField('Vote Type', choices=[('estimation', 'Estimation'), ('brainstorming', 'Brainstorming'), ('options_voting', 'Options Voting')], validators=[DataRequired()])
+    vote_type = SelectField('Vote Type', choices=[('brainstorming', 'Brainstorming'), ('estimation', 'Estimation') ,('options_voting', 'Options Voting')], validators=[DataRequired()])
     task_details = TextAreaField('Task Details')
     option_list = TextAreaField('Option List')
 

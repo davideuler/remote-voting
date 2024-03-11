@@ -1,33 +1,34 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<h1>Start a New Vote</h1>
-<form method="post">
-    {{ form.hidden_tag() }}
-    <div>
-        <label for="title">Title:</label>
-        {{ form.title }}
-    </div>
-    <div>
-        <label for="description">Description:</label>
-        {{ form.description }}
-    </div>
-    <div>
-        <label for="vote_type">Vote Type:</label>
-        {{ form.vote_type }}
-    </div>
-    <div id="task_details_container" style="display: none;">
-        <label for="task_details">Task Details:</label>
-        {{ form.task_details }}
-    </div>
-    <div id="option_list_container" style="display: none;">
-        <label for="option_list">Option List:</label>
-        {{ form.option_list }}
-    </div>
-    <button type="submit">Start Vote</button>
-</form>
+<div class="container mt-4">
+    <h1 class="mb-4">Start a New Vote</h1>
+    <form method="post">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            <label for="{{ form.title.id }}">Title:</label>
+            {{ form.title(class_="form-control") }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.description.id }}">Description:</label>
+            {{ form.description(class_="form-control") }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.vote_type.id }}">Vote Type:</label>
+            {{ form.vote_type(class_="form-control") }}
+        </div>
+        <div id="task_details_container" class="form-group" style="display: none;">
+            <label for="{{ form.task_details.id }}">Task Details:</label>
+            {{ form.task_details(class_="form-control") }}
+        </div>
+        <div id="option_list_container" class="form-group" style="display: none;">
+            <label for="{{ form.option_list.id }}">Option List:</label>
+            {{ form.option_list(class_="form-control") }}
+        </div>
+        <button type="submit" class="btn btn-primary">Start Vote</button>
+    </form>
+</div>
 <script>
-    document.getElementById('vote_type').addEventListener('change', function() {
+    document.getElementById('{{ form.vote_type.id }}').addEventListener('change', function() {
         var voteType = this.value;
         var taskDetailsContainer = document.getElementById('task_details_container');
         var optionListContainer = document.getElementById('option_list_container');

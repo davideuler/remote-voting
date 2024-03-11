@@ -5,6 +5,17 @@
 <p>{{ voting_session.description }}</p>
 <form method="post">
     {{ form.hidden_tag() }}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
     {% for task in tasks %}
     <div>
         <label for="votes-{{ loop.index0 }}-vote_value">{{ task.title }}:</label>

@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, jsonify
+from flask import render_template, request, redirect, url_for, jsonify, flash
 from flask_login import login_required, current_user
 from app import app, db
 from datetime import datetime
@@ -54,18 +54,38 @@ def vote(session_id):
         return redirect(url_for('index'))
     form = VoteForm()
     if request.method == 'POST': #form.validate_on_submit():
-        # Record user's votes
-        print("votes submitted....")
+        if not form.validate_on_submit():
+            app.logger.info('Form failed to validate:')
+            app.logger.info(form.errors)
+
+        error = False
         for vote_form in form.votes:
-            vote = Vote(
+            # Check if the vote already exists
+            existing_vote = Vote.query.filter_by(
                 session_id=session_id,
                 task_id=vote_form.task_id.data,
-                vote_value=vote_form.vote_value.data,
                 user_id=current_user.id
-            )
-            db.session.add(vote)
-        db.session.commit()
-        return redirect(url_for('vote_details', session_id=session_id))
+            ).first()
+            if existing_vote:
+                # If vote already exists, flash an error message
+                flash('You have already voted for this task. You cannot vote twice.', 'error')
+                error = True
+                break
+
+        if not error:
+            # Record user's votes
+            print("votes submitted....")
+            for vote_form in form.votes:
+                vote = Vote(
+                    session_id=session_id,
+                    task_id=vote_form.task_id.data,
+                    vote_value=vote_form.vote_value.data,
+                    user_id=current_user.id
+                )
+                db.session.add(vote)
+            db.session.commit()
+            return redirect(url_for('vote_details', session_id=session_id))
+
     tasks = Task.query.filter_by(session_id=session_id).all()
     print("tasks count:%s tasks:%s" % (len(tasks), str(tasks)) )
     # Initialize form.votes with the number of tasks

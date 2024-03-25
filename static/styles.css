@@ -1,5 +1,42 @@
-body {
+/** body {
     font-family: Arial, sans-serif;
+} **/
+
+/* Add this in a <style> tag within the head of base.html or in an external stylesheet */
+body {
+    margin-top: 20px;
+    background: #f8f9fa; /* Light gray background */
+}
+
+.container {
+    background: #fff; /* White background for content */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive font size for the title */
+h1 {
+    font-size: 2rem;
+}
+
+/* Style the form elements consistently */
+.form-control {
+    margin-bottom: 10px;
+}
+
+/* Customize the button */
+.btn-primary {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+/* Add responsiveness for smaller devices */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
 }
 
 header {

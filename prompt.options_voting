@@ -1,0 +1,11 @@
+Task table:
+option_list: When the voting type is options_voting, this field stores the option list, it is multiple lines text with each line an option. The field can be empty.
+
+Vote table:
+vote_value: The vote value, can be null. For point estimation, this value represents the estimated points; for options_voting, this is the value for option selected during voting.
+
+For a voting with type of options_voting, there is only one task on the voting page. 
+All options values is stored in the options_list of a Task, each line an option. The page should show radio box for each option.
+Use tick on the option and submit. The system saves the vote result to Vote table. 
+. 
+

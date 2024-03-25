@@ -9,6 +9,7 @@ class VotingSession(db.Model):
     session_id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     title = db.Column(db.String(120), nullable=False)
     description = db.Column(db.Text, nullable=True)
+    option_list = db.Column(db.Text, nullable=True)  # Multiple lines text with each line an option
     is_active = db.Column(db.Boolean, default=True)
     vote_type = db.Column(db.String(50), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -24,7 +25,7 @@ class Task(db.Model):
     task_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(120), nullable=False)
     description = db.Column(db.Text, nullable=True)
-    option_list = db.Column(db.Text, nullable=True)  # JSON encoded list of options
+    option_list = db.Column(db.Text, nullable=True)  # Multiple lines text with each line an option
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     session_id = db.Column(db.String(36), db.ForeignKey('voting_session.session_id'), nullable=False)
@@ -51,3 +52,4 @@ class User(UserMixin, db.Model):
     # Flask-Login integration
     def get_id(self):
         return str(self.id)  # Convert the ID to a string
+42     # For estimation: estimated points; for options_voting: selected option

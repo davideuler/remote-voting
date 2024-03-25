@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SelectField, FieldList, FormField 
+from wtforms import StringField, TextAreaField, SelectField, FieldList, FormField , RadioField
 from wtforms.validators import DataRequired
 
 class StartVoteForm(FlaskForm):
@@ -9,6 +9,9 @@ class StartVoteForm(FlaskForm):
     task_details = TextAreaField('Task Details')
     option_list = TextAreaField('Option List')
 
+class OptionVoteField(FlaskForm):
+    option = RadioField('Options', coerce=str)
+
 
 class VoteField(FlaskForm):
     task_id = StringField('Task ID')
@@ -17,5 +20,6 @@ class VoteField(FlaskForm):
 
 class VoteForm(FlaskForm):
     votes = FieldList(FormField(VoteField), min_entries=1)
+    option_votes = FieldList(FormField(OptionVoteField), min_entries=0)
 
 

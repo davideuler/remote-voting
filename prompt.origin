@@ -30,13 +30,13 @@ Task table:
 task_id: Task ID, auto-increment integer
 title: The title of the task
 description: Detailed description of the task
-option_list: When the voting type is options_voting, this field stores the option list, saving a list, each list for an option. The field can be empty.
+option_list: When the voting type is options_voting, this field stores the option list, it is multiple lines text with each line an option. The field can be empty.
 created_at, updated_at
 
 Vote table:
 session_id: The id of VoteSession
 task_id: Associated task ID, can be null
-vote_value: The vote value, can be null. For point estimation, this value represents the estimated points; for options_voting, this value represents the selected option. For options_voting, this value indicates the option selected during voting.
+vote_value: The vote value, can be null. For point estimation, this value represents the estimated points; for options_voting, this is the value for option selected during voting.
 user_id: The voting user
 
 ## User login:

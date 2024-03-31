@@ -77,19 +77,22 @@ def vote(session_id):
                 error = True
                 break
 
-        if not error and not voting_session.vote_type == 'options_voting':
-            # Record user's votes
-            print("votes submitted....")
-            for vote_form in form.votes:
-                vote = Vote(
-                    session_id=session_id,
-                    task_id=vote_form.task_id.data,
-                    vote_value=vote_form.vote_value.data,
-                    user_id=current_user.id
-                )
-                db.session.add(vote)
-            db.session.commit()
-            return redirect(url_for('vote_details', session_id=session_id))
+        if not error:
+            if not voting_session.vote_type == 'options_voting':
+                # Record user's votes
+                print("votes submitted....")
+                for vote_form in form.votes:
+                    vote = Vote(
+                        session_id=session_id,
+                        task_id=vote_form.task_id.data,
+                        vote_value=vote_form.vote_value.data,
+                        user_id=current_user.id
+                    )
+                    db.session.add(vote)
+                db.session.commit()
+                return redirect(url_for('vote_details', session_id=session_id))
+        else:
+            return redirect(url_for('vote', session_id=session_id))
     elif request.method == 'POST': #and form.validate_on_submit(): 
         app.logger.error('Form failed to validate:')
         app.logger.error(form.errors)

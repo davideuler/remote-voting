@@ -130,6 +130,11 @@ def vote(session_id):
 @login_required
 def vote_details(session_id):
     voting_session = VotingSession.query.get_or_404(session_id)
+    # Check if the current user is the creator of the voting session
+    if voting_session.creator_user_id != current_user.id:
+        flash('You do not have permission to view this vote detail.', 'error')
+        return redirect(url_for('index'))
+
     tasks = Task.query.filter_by(session_id=session_id).all()
     votes = Vote.query.filter_by(session_id=session_id).all()
 

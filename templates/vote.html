@@ -8,9 +8,9 @@
 
             <form method="post" class="my-4">
                 {{ form.hidden_tag() }}
-                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% with messages = get_flashed_messages(with_categories=false) %}
                 {% if messages %}
-                    {% for category, message in messages %}
+                    {% for message in messages %}
                     <div class="alert alert-{{ category }}">
                         {{ message }}
                     </div>

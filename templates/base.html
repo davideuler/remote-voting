@@ -18,6 +18,7 @@
                 <li><a href="{{ url_for('start_vote') }}">Start Vote</a></li>
                 {% if current_user.is_authenticated %}
                     <li><a href="{{ url_for('logout') }}">Logout</a></li>
+		    <li> <label style="font-size:12px"> {{current_user.username}} </label> </li>
                 {% else %}
                     <li><a href="{{ url_for('login') }}">Login</a></li>
                     <li><a href="{{ url_for('register') }}">Register</a></li>

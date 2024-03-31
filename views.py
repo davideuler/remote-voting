@@ -96,6 +96,10 @@ def vote(session_id):
 
     tasks = Task.query.filter_by(session_id=session_id).all()
 
+    # Initialize form.votes with the number of tasks
+    while len(form.votes) < len(tasks):
+        form.votes.append_entry()
+
     for i, task in enumerate(tasks):
         form.votes[i].task_id.data = task.task_id
         

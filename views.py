@@ -106,7 +106,7 @@ def vote(session_id):
         
     # Handle options voting post request
     #print("vote_type:%s " % (voting_session.vote_type)) 
-    if voting_session.vote_type == 'options_voting' and request.method == 'POST':
+    if voting_session.vote_type == 'options_voting':
         task = tasks[0]  # There should be only one task for options voting
         options = task.option_list.splitlines()
         form.option_votes = []
@@ -114,7 +114,7 @@ def vote(session_id):
         option_form.option.choices = [(option, option) for option in options]
         form.option_votes.append(option_form)
         selected_option = request.form.get('option')
-        if selected_option:
+        if selected_option and request.method == 'POST':
             vote = Vote(session_id=session_id, task_id=task.task_id, vote_value=selected_option, user_id=current_user.id)
             db.session.add(vote)
             db.session.commit()

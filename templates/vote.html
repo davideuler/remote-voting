@@ -19,9 +19,10 @@
                 {% endwith %}
 
                 {% for task in tasks %}
-                <div class="form-group">
+                <div class="form-group task-group">
                   {{ form.votes[loop.index0].task_id(value=task.task_id, readonly='readonly', type='hidden') }}
                   {% if voting_session.vote_type == 'options_voting' %}
+                  <div class="options-container">
                     {% for option_form in form.option_votes %}
                         <div class="form-check">
                             {{ option_form.option(class="form-check-input") }}
@@ -30,13 +31,16 @@
                             </label>
                         </div>
                     {% endfor %}
+                  </div>
                   {% else %}
                     <label for="votes-{{ loop.index0 }}-vote_value">{{ task.title }}:</label>
                     {{ form.votes[loop.index0].vote_value(class="form-control") }}
                   {% endif %}
                 </div>
                 {% endfor %}
-                <button type="submit" class="btn btn-primary">Submit Vote</button>
+               <div class="submit-button-container">
+                  <button type="submit" class="btn btn-primary btn-submit">Submit Vote</button>
+               </div>
             </form>
         </div>
     </div>

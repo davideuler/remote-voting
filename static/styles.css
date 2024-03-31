@@ -21,9 +21,30 @@ h1 {
 }
 
 /* Style the form elements consistently */
-.form-control {
-    margin-bottom: 10px;
+
+.task-group {
+  margin-bottom: 20px; /* Adjust spacing between each task */
 }
+
+.options-container {
+  margin-bottom: 10px; /* Adjust spacing between options and the submit button */
+}
+
+/* Ensure list items are displayed correctly */
+ul.form-check-input {
+    list-style-type: none; /* Remove bullet points */
+    padding: 20; /* Remove default padding */
+    margin-top: 30px; /* Add space between options */
+}
+
+ul.form-check-input li {
+    margin-bottom: 3px; /* Add space between options */
+}
+
+.submit-button-container {
+  margin-top: 8rem; /* Add space above the submit button */
+}
+
 
 /* Customize the button */
 .btn-primary {

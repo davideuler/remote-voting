@@ -77,7 +77,7 @@ def vote(session_id):
                 error = True
                 break
 
-        if not error:
+        if not error and not voting_session.vote_type == 'options_voting':
             # Record user's votes
             print("votes submitted....")
             for vote_form in form.votes:
@@ -97,28 +97,28 @@ def vote(session_id):
     tasks = Task.query.filter_by(session_id=session_id).all()
 
     # Initialize form.votes with the number of tasks
-    while len(form.votes) < len(tasks):
-        form.votes.append_entry()
+    if request.method == 'GET':  # Only populate form.votes on GET request
+        while len(form.votes) < len(tasks):
+            form.votes.append_entry()
 
-    for i, task in enumerate(tasks):
-        form.votes[i].task_id.data = task.task_id
+        for i, task in enumerate(tasks):
+            form.votes[i].task_id.data = task.task_id
         
-        # Handle options voting
-        #print("vote_type:%s " % (voting_session.vote_type)) 
-        if voting_session.vote_type == 'options_voting':
-            task = tasks[0]  # There should be only one task for options voting
-            options = task.option_list.splitlines()
-            form.option_votes = []
-            option_form = OptionVoteField()
-            option_form.option.choices = [(option, option) for option in options]
-            form.option_votes.append(option_form)
-            if request.method == 'POST':
-                selected_option = request.form.get('option')
-                if selected_option:
-                    vote = Vote(session_id=session_id, task_id=task.task_id, vote_value=selected_option, user_id=current_user.id)
-                    db.session.add(vote)
-                    db.session.commit()
-                    return redirect(url_for('vote_details', session_id=session_id))
+    # Handle options voting post request
+    #print("vote_type:%s " % (voting_session.vote_type)) 
+    if voting_session.vote_type == 'options_voting' and request.method == 'POST':
+        task = tasks[0]  # There should be only one task for options voting
+        options = task.option_list.splitlines()
+        form.option_votes = []
+        option_form = OptionVoteField()
+        option_form.option.choices = [(option, option) for option in options]
+        form.option_votes.append(option_form)
+        selected_option = request.form.get('option')
+        if selected_option:
+            vote = Vote(session_id=session_id, task_id=task.task_id, vote_value=selected_option, user_id=current_user.id)
+            db.session.add(vote)
+            db.session.commit()
+            return redirect(url_for('vote_details', session_id=session_id))
 
     #print("form.votes, len:%d votes:%s" %  (len(form.votes), str(form.votes)) )
     return render_template('vote.html', voting_session=voting_session, tasks=tasks, form=form)

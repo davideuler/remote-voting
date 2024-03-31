@@ -1,0 +1,1 @@
+Besides authentication by github, user should be able to register and login the system by username and password. The username could not be duplicated. When register the product,  both username and email should be provided.
